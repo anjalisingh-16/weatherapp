@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{>headerlinks}}
+</head>
+<body>
+    {{>navbar}}
+     <div class="container-fluid main_header">
+        <div class="row">
+            <div class="col-md-10 col-12 mx-auto">
+              <div class="main_content">
+                <form action="" class="temp_form">
+                    <input type="text" name="" id="cityName" placeholder="Enter your City name" autocomplete="off">
+                    <input type="submit" value="search" id="submitBtn">
+                </form>
+              </div>
+              <div class="tempInformation">
+                <div class="top_layer">
+                    <p id="day"></p>
+                    <p id="today_date"></p>
+                </div>
+                <div class="main_layer">
+                    <p id="city_name">Get Output here</p>
+                <div class="middle_layer data_hide">
+                    <p ><span id="temp"></span><sup>o</sup>C<span id="condition"></span></p>
+                    <p id="temp_status"><i class="fa fa_cloud" aria-hidden="true"></i></p>
+                </div>
+                  
+                </div>
+              </div>
+                   </div>
+                </div>
+                </div>
+    {{>footer}}
+    <script >
+        const cityName=document.getElementById('cityName');
+        const city_name=document.getElementById('city_name');
+        const temp=document.getElementById("temp");
+        const submitBtn=document.getElementById("submitBtn");
+        const datahide=document.querySelector('.middle_layer');
+// submitBtn.addEventListener('click',getInfo);
+   const getInfo= async(event)=>{
+    event.preventDefault();
+    let cityVal=cityName.value;
+    if(cityVal===" ")
+    {
+city_name.innerText="Please write the name before you search";
+datahide.classList.add('data_hide')
+    }
+    else
+    {
+        try{
+     let url=`https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=metric&appid=2cf65761df4c761c233bf26729960da2`;
+     let response= await fetch(url);
+     const data= await response.json();
+      const arrData=[data];
+      city_name.innerText=`${arrData[0].name},${arrData[0].sys.country}`;
+      temp.innerText=arrData[0].main.temp;
+      datahide.classList.remove('data_hide');
+        }
+        catch{
+            city_name.innerText="Please enter the city name properly";
+            datahide.classList.add('data_hide')
+        }
+    } 
+   
+}
+    submitBtn.addEventListener('click',getInfo);
+    
+    </script>
+</body>
+</html>
